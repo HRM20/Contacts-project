@@ -1,0 +1,5 @@
+export {default as Contacts} from "./components/contact/Contacts"
+export {default as Contact} from "./components/contact/Contact"
+export {default as Navbar} from "./components/Navbar"
+export {default as AddContact} from "./components/contact/AddContact"
+export {default as EditContact} from "./components/contact/EditContact"
