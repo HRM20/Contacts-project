@@ -1,14 +1,33 @@
-import { useState } from "react"
-import { Routes , Route , Navigate} from "react-router-dom";
-import { Navbar, Contacts, Contact ,AddContact , EditContact } from "../index"
-
+import { useState, useEffect } from "react"
+import { Routes, Route, Navigate } from "react-router-dom";
+import { Navbar, Contacts, Contact, AddContact, EditContact } from "../index"
+import axios from "axios";
 
 function App() {
   const [contacts, setcontacts] = useState([]);
-  const [loading, setloading] = useState(false)
-  console.log(setcontacts)
+  const [loading, setloading] = useState(false);
+  const [groups, setgroups] = useState();
+  // console.log(setcontacts)
   console.log(setloading)
+  console.log(groups)
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setloading(true)
+        const { data: contactsData } = await axios.get("http://localhost:9000/contacts")
+        const { data: groupsData } = await axios.get("http://localhost:9000/groups")
+        setcontacts(contactsData);
+        setgroups(groupsData);
+        setloading(false);
+      }
+      catch (e) {
+        console.log(e.massage);
+        setloading(false);
+      }
+    };
+    fetchData()
+  }, [])
 
   return (
     <div style={{ width: "100%" }}>
@@ -29,6 +48,11 @@ function App() {
 
 export default App
 {/* 
-  خط17
+  خط24
   در صورتی که ادرس خالی باشه به صفحه کانتکتس می رود
   */}
+
+{/*
+     خط12
+     در خواست دادن به سرور برای دسترسی به دیتا
+     */}

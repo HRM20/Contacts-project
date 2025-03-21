@@ -1,0 +1,48 @@
+{
+  "contacts": [
+    {},
+    {
+      "id": "df62",
+      "fullname": "sara Asadi",
+      "mobile": "98989898",
+      "email": "sara@gmail.com",
+      "photo": ""
+    },
+    {
+      "id": "df63",
+      "fullname": "rahman",
+      "mobile": "97979799",
+      "email": "rahman@gmail.com",
+      "photo": ""
+    },
+    {
+      "id": "df64",
+      "fullname": "mahdi minaie",
+      "mobile": "9898989888",
+      "email": "mehdi@gmail.com",
+      "photo": ""
+    }
+  ],
+  "groups": [
+    {
+      "id": "1",
+      "name": "همکار"
+    },
+    {
+      "id": "2",
+      "name": "دوست"
+    },
+    {
+      "id": "3",
+      "name": "فامیل"
+    },
+    {
+      "id": "4",
+      "name": "سرویس"
+    },
+    {
+      "id": "5",
+      "name": "آشنا"
+    }
+  ]
+}
