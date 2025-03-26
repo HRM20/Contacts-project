@@ -1,11 +1,11 @@
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import Contact from "./Contact";
+import AddContact from "./AddContact";
 
-
-import {  PINK } from "../../helpers/colors";
+import { PINK } from "../../helpers/colors";
 import { Spinner } from "react-bootstrap";
 
-const Contacts = ({ contacts , loading }) => {
+const Contacts = ({ contacts, loading }) => {
   return (
     <div className="container">
       <section>
@@ -13,7 +13,10 @@ const Contacts = ({ contacts , loading }) => {
           <div className="row">
             <div className="col">
               <p className="h3 float-end">
-                <Link to={"add"} className="btn m-2" style={{ background: PINK }}>
+                <Link
+                  to={"add"}
+                  className="btn m-2"
+                  style={{ background: PINK }}>
                   ایجاد مخاطب جدید
                   <i className="fa fa-plus-circle mx-2"></i>
                 </Link>
@@ -22,20 +25,20 @@ const Contacts = ({ contacts , loading }) => {
           </div>
         </div>
       </section>
-    
-        <section>
-          {
-            loading ? <Spinner /> : (<div className="row">
-              {
-                contacts.length > 0 ? (contacts.map((c)=>(
-                  <Contact contact={c} key={c.id} />
-                ))) : (<div>مخاطبی یافت نشد</div> 
+
+      <section>
+        {
+          loading ? <Spinner /> : (<div className="row">
+            {
+              contacts.length > 0 ? (contacts.map((c) => (
+                <Contact contact={c} key={c.id} />
+              ))) : (<div>مخاطبی یافت نشد</div>
               )}
-            
-            
-            </div>)
-          }
-        </section>
+
+
+          </div>)
+        }
+      </section>
     </div>
   );
 };
