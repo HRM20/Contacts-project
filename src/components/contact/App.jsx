@@ -1,21 +1,24 @@
 import { useState, useEffect } from "react"
-import { Routes, Route, Navigate , useNavigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { Navbar, Contacts, Contact, AddContact, EditContact } from "../index"
 // import axios from "axios";
-import { getAllContacts , getAllgroups , createContact } from "../server-URL";
+import { getAllContacts, getAllgroups, createContact, deletContact } from "../server-URL";
 import ViewContact from "./ViewContact";
+import { confirmAlert } from "react-confirm-alert";
+import { CURRENTLINE, FOREGROUND, PURPLE, YELLOW } from "../../helpers/colors";
 
 function App() {
   const navigate = useNavigate()
   const [contacts, setcontacts] = useState([]);
   const [loading, setloading] = useState(false);
   const [groups, setgroups] = useState();
-  const [contact , setContact] = useState({
-    fullname : "",
-    photo : "",
-    mobile :  "",
-    email : "",
-    job : "",
+  const [forceRender, setForceRender] = useState(false);
+  const [contact, setContact] = useState({
+    fullname: "",
+    photo: "",
+    mobile: "",
+    email: "",
+    job: "",
   })//وظیفه گرفتن اطلاعات و ساخت مخاطب جدید را دارد
   // console.log(setcontacts)
   console.log(setloading)
@@ -42,25 +45,61 @@ function App() {
   }, [])
 
 
-  const setContactInfo =(event)=>{
+  const setContactInfo = (event) => {
     setContact({
       ...contact,
-      [event.target.name] : event.target.value// مقدار مناسب رو به نام مناسب نسبت داده ورودی پرامپ و ابجکتی که در بالا تعریف شده
+      [event.target.name]: event.target.value// مقدار مناسب رو به نام مناسب نسبت داده ورودی پرامپ و ابجکتی که در بالا تعریف شده
     })
   }
 
-  const createContactForm = async(event)=>{
+  const createContactForm = async (event) => {
     event.preventDefault()
-    try{
-      const {status} = await createContact(contact)
+    try {
+      const { status } = await createContact(contact)
 
-      if(status == 201){
+      if (status == 201) {
         setContact([])
         navigate("/contacts")
       }
     }
-    catch(err){
+    catch (err) {
       console.log(err.massage)
+    }
+  }
+
+  const confirm = (contactId, contactFullname) => {
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div dir="rtl" style={{ background: CURRENTLINE, border: `1px solid ${PURPLE}`, borderRadius: "1em", padding:"2rem" }}>
+            <h1 style={{ color: YELLOW }}>پاک کردن مخاطب</h1>
+            <p style={{ color: FOREGROUND }}>ایا از حذف {contactFullname}اطمینان دارید ؟</p>
+            <button
+              className="btn btn-outline-danger mx-2"
+              onClick={() => {
+                removeContact(contactId)
+                onClose()
+              }}>مطمعن هستم </button>
+            <button
+              className="btn btn-outline-light" onClick={onClose}>انصراف</button>
+          </div>
+        )
+      }
+    });
+  };
+
+  const removeContact = async (contactId) => {
+    try {
+      setloading(true)
+      const response = await deletContact(contactId)
+      if (response) {
+        const { data: contactData } = await getAllContacts()
+        setcontacts(contactData)
+        setloading(false)
+      }
+    } catch (error) {
+      console.log(error.massage)
+      setloading(false)
     }
   }
 
@@ -70,10 +109,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to={"/contacts"} />}></Route>
         <Route path="contacts"
-          element={<Contacts contacts={contacts} loading={loading} />}
+          element={<Contacts contacts={contacts} loading={loading} confirmDelete={confirm} />}
         />
         <Route path="contacts/:contactsId" element={<ViewContact />} />
-        <Route path="contacts/edit/:contactsID" element={<EditContact />} />
+        <Route path="contacts/edit/:contactsID" element={<EditContact setForceRender={setForceRender} forceRender={forceRender} />} />
         <Route path="contacts/add" element={<AddContact createContactForm={createContactForm} groups={groups} loading={loading} contact={contact} setContactInfo={setContactInfo} />} />
 
       </Routes>

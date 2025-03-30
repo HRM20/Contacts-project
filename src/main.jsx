@@ -4,6 +4,8 @@ import './index.css'
 import { BrowserRouter } from 'react-router-dom'
 import App from './components/contact/App'
 
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+
 
 
 

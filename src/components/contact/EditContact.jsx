@@ -5,7 +5,7 @@
 //   getContact,
 //   getAllGroups,
 //   updateContact,
-// } from "../../services/contactService";
+// } from  "../server-URL";
 // import Spinner from "../Spinner";
 // import { COMMENT, ORANGE, PURPLE } from "../../helpers/colors";
 
@@ -204,10 +204,15 @@
 // };
 // export default EditContact;
 
-export default function EditContact() {
+
+import React from 'react'
+
+function EditContact() {
   return (
     <div>
       
     </div>
   )
 }
+
+export default EditContact
