@@ -1,6 +1,6 @@
 import { PURPLE, COMMENT } from "../../helpers/colors"
 
-const SearchContact = () => {
+const SearchContact = ({query , search}) => {
   return (
     <div className="input-group mx-2" dir="ltr">
       <span
@@ -13,8 +13,8 @@ const SearchContact = () => {
       <input
         type="text"
         dir="rtl"
-        // value={query.text}
-        // onChange={search}
+        value={query.text}
+        onChange={search}
         style={{ background: COMMENT, borderColor: PURPLE }}
         className="form-control"
         placeholder="جستجوی مخاطب"

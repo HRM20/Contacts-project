@@ -5,7 +5,7 @@ import AddContact from "./AddContact";
 import { PINK } from "../../helpers/colors";
 import { Spinner } from "react-bootstrap";
 
-const Contacts = ({ contacts, loading , confirmDelete}) => {
+const Contacts = ({ contacts, loading, confirmDelete }) => {
   return (
     <div className="container">
       <section>
@@ -31,7 +31,7 @@ const Contacts = ({ contacts, loading , confirmDelete}) => {
           loading ? <Spinner /> : (<div className="row">
             {
               contacts.length > 0 ? (contacts.map((c) => (
-                  <Contact contact={c} key={c.id} confirmDelete={()=> confirmDelete(c.id , c.fullname)} />
+                <Contact contact={c} key={c.id} confirmDelete={() => confirmDelete(c.id, c.fullname)} />
               ))) : (<div>مخاطبی یافت نشد</div>
               )}
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { Navbar, Contacts, Contact, AddContact, EditContact } from "../index"
 // import axios from "axios";
-import { getAllContacts, getAllgroups, createContact, deletContact } from "../server-URL";
+import { getAllContacts, getAllgroups, createContact, deletContact, getContact } from "../server-URL";
 import ViewContact from "./ViewContact";
 import { confirmAlert } from "react-confirm-alert";
 import { CURRENTLINE, FOREGROUND, PURPLE, YELLOW } from "../../helpers/colors";
@@ -13,6 +13,7 @@ function App() {
   const [loading, setloading] = useState(false);
   const [groups, setgroups] = useState();
   const [forceRender, setForceRender] = useState(false);
+  const [getFiltredContacts, setFiltredContacts] = useState([])
   const [contact, setContact] = useState({
     fullname: "",
     photo: "",
@@ -20,9 +21,9 @@ function App() {
     email: "",
     job: "",
   })//وظیفه گرفتن اطلاعات و ساخت مخاطب جدید را دارد
-  // console.log(setcontacts)
-  console.log(setloading)
-  console.log(groups)
+  console.log(contacts)
+
+  const [query, setQuery] = useState({ text: "" })
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,6 +34,7 @@ function App() {
         const { data: contactsData } = await getAllContacts()//از جایی که ادرس ها را در ان تعریف کردیم فراخوانی میکنیم
         const { data: groupsData } = await getAllgroups()
         setcontacts(contactsData);//مقدار جدید برای دیتایی که از سرور گرفته
+        setFiltredContacts(contactsData);
         setgroups(groupsData);
         setloading(false);
       }
@@ -51,6 +53,22 @@ function App() {
       [event.target.name]: event.target.value// مقدار مناسب رو به نام مناسب نسبت داده ورودی پرامپ و ابجکتی که در بالا تعریف شده
     })
   }
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         setloading(true)
+//         const{ date : contactsData} = await getAllContacts();
+//         setFiltredContacts(contactsData);
+//         setloading(false);
+//       } catch (err) {
+//         console.log(err.message)
+//         setloading(false);
+//       }
+//     };
+
+//     fetchData(),
+// }, [forceRender]);
 
   const createContactForm = async (event) => {
     event.preventDefault()
@@ -71,7 +89,7 @@ function App() {
     confirmAlert({
       customUI: ({ onClose }) => {
         return (
-          <div dir="rtl" style={{ background: CURRENTLINE, border: `1px solid ${PURPLE}`, borderRadius: "1em", padding:"2rem" }}>
+          <div dir="rtl" style={{ background: CURRENTLINE, border: `1px solid ${PURPLE}`, borderRadius: "1em", padding: "2rem" }}>
             <h1 style={{ color: YELLOW }}>پاک کردن مخاطب</h1>
             <p style={{ color: FOREGROUND }}>ایا از حذف {contactFullname}اطمینان دارید ؟</p>
             <button
@@ -103,13 +121,22 @@ function App() {
     }
   }
 
+  const contactSearch = (event) => {
+    setQuery({ ...query, text: event.target.value })
+    const allConatcts = getContact.filter((contact) => {
+      return contact.fullname.toLowerCase().includes(event.target.value.toLowerCase())
+    })
+    setFiltredContacts(allConatcts);
+  }
+
+
   return (
     <div style={{ width: "100%" }}>
-      <Navbar />
+      <Navbar query={query} search={contactSearch} />
       <Routes>
         <Route path="/" element={<Navigate to={"/contacts"} />}></Route>
         <Route path="contacts"
-          element={<Contacts contacts={contacts} loading={loading} confirmDelete={confirm} />}
+          element={<Contacts contacts={getFiltredContacts} loading={loading} confirmDelete={confirm} />}
         />
         <Route path="contacts/:contactsId" element={<ViewContact />} />
         <Route path="contacts/edit/:contactsID" element={<EditContact setForceRender={setForceRender} forceRender={forceRender} />} />
@@ -122,18 +149,18 @@ function App() {
 
 export default App
 {/* 
-  خط71
+  خط140
   در صورتی که ادرس خالی باشه به صفحه کانتکتس می رود
   */}
 
 {/*
-     خط30
+     خط37
      در خواست دادن به سرور برای دسترسی به دیتا
      */}
 
 {
   /* 
-  خط28
+  خط37
   طریقه ساخت اسم موقتی برای یک متغیر
   */
 }
